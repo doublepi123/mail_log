@@ -16,7 +16,7 @@ type LogSaverServer struct {
 	Redis *redis.Client
 }
 
-func (server LogSaverServer) Init(logDao *dao.LogDao, client *redis.Client) {
+func (server *LogSaverServer) Init(logDao *dao.LogDao, client *redis.Client) {
 	server.dao = logDao
 	server.Redis = client
 }
