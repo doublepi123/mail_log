@@ -2,13 +2,15 @@ package util
 
 import (
 	"fmt"
+	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"os"
 )
 
 type Database struct {
-	DB *gorm.DB
+	DB    *gorm.DB
+	Redis *redis.Client
 }
 
 func (db *Database) Init() {
@@ -18,5 +20,10 @@ func (db *Database) Init() {
 		fmt.Println(err)
 		return
 	}
+	db.Redis = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
 
 }
