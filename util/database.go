@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"github.com/go-redis/redis/v8"
+	"github.com/go-redis/redis"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"os"

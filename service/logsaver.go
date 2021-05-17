@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
+	"github.com/go-redis/redis"
 	"mail_log/dao"
 	"mail_log/entity"
 	"mail_log/util"
@@ -23,7 +23,7 @@ func (server *LogSaverServer) Init(logDao *dao.LogDao, client *redis.Client) {
 
 func (server LogSaverServer) ListenAndSave(level string) {
 	for {
-		message, err := server.Redis.RPop(ctx, level).Result()
+		message, err := server.Redis.RPop(level).Result()
 		if err != nil {
 			time.Sleep(time.Millisecond)
 			continue
