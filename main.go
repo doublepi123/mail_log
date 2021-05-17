@@ -13,5 +13,9 @@ func main() {
 	logdao.Init(db)
 	logsaver := service.LogSaverServer{}
 	logsaver.Init(logdao, db.Redis)
-	logsaver.Run()
+	go logsaver.Run()
+	avai := &service.AvailiableServer{}
+	avai.Init(db)
+	go avai.ListenAndServer()
+	util.PauseForRun()
 }
