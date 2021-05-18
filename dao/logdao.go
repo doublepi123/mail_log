@@ -3,6 +3,7 @@ package dao
 import (
 	"mail_log/entity"
 	"mail_log/util"
+	"time"
 )
 
 var LogItem []string = []string{"INFO", "ERROR", "USER", "SELF"}
@@ -13,16 +14,14 @@ type LogDao struct {
 
 func (dao *LogDao) Init(db *util.Database) {
 	dao.db = db
-	for i := range LogItem {
-		dao.db.DB.Table(LogItem[i]).AutoMigrate(&entity.LogEntity{})
-	}
-	var str string
-	for i := range LogItem {
-		str += LogItem[i] + ","
-	}
-	dao.db.Redis.Set("items", str, 0)
 }
 
 func (dao LogDao) Write(logEntity *entity.LogEntity) {
-	dao.db.DB.Table(logEntity.Level).Create(logEntity)
+	table := logEntity.Level + time.Now().Format("200601")
+	dao.db.DB.Table(table).AutoMigrate(&entity.LogEntity{})
+	dao.db.DB.AutoMigrate(&entity.Item{})
+	dao.db.DB.Create(&entity.Item{
+		Name: table,
+	})
+	dao.db.DB.Table(table).Create(logEntity)
 }
