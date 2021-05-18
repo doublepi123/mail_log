@@ -16,6 +16,11 @@ func (dao *LogDao) Init(db *util.Database) {
 	for i := range LogItem {
 		dao.db.DB.Table(LogItem[i]).AutoMigrate(&entity.LogEntity{})
 	}
+	var str string
+	for i := range LogItem {
+		str += LogItem[i] + ","
+	}
+	dao.db.Redis.Set("items", str, 0)
 }
 
 func (dao LogDao) Write(logEntity *entity.LogEntity) {
