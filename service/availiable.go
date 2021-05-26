@@ -17,13 +17,14 @@ func (server *AvailiableServer) Init(db *util.Database) {
 
 func (server *AvailiableServer) Check() interface{} {
 	redisErr := server.db.Redis.Set("aha", "testing", 0).Err()
-	var a int64
-	MysqlErr := server.db.DB.Table("INFO").Count(&a).Error
+	MysqlErr := server.db.DB.Raw("SELECT VERSION()").Error
 	errs := make([]error, 0)
 	if redisErr != nil {
+		fmt.Println("RedisErr " + fmt.Sprint(redisErr))
 		errs = append(errs, redisErr)
 	}
 	if MysqlErr != nil {
+		fmt.Println("MysqlErr " + fmt.Sprint(MysqlErr))
 		errs = append(errs, MysqlErr)
 	}
 	return errs
