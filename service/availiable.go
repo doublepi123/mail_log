@@ -47,6 +47,6 @@ func (server *AvailiableServer) checkAcheck(c *gin.Context) {
 func (server *AvailiableServer) ListenAndServer() {
 	r := gin.Default()
 	r.GET("/check", server.checkAcheck)
-	r.Run("127.0.0.1:9999")
+	r.Run(":9999")
 	util.PauseForRun()
 }

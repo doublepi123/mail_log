@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-var LogItem []string = []string{"INFO", "ERROR", "USER", "SELF"}
+var LogItem []string = []string{"INFO", "ERROR", "USER", "SELF", "info", "error", "picture"}
 
 type LogDao struct {
 	db *util.Database
@@ -14,6 +14,20 @@ type LogDao struct {
 
 func (dao *LogDao) Init(db *util.Database) {
 	dao.db = db
+}
+
+func (dao LogDao) WritePitcure(picture *entity.PictureEntity) {
+	table := "picture" + time.Now().Format("200601")
+	dao.db.DB.Table(table).AutoMigrate(&entity.PictureEntity{})
+	dao.db.DB.AutoMigrate(&entity.Item{})
+	var count int64
+	dao.db.DB.Model(&entity.Item{}).Where("Name = ?", table).Count(&count)
+	if count == 0 {
+		dao.db.DB.Create(&entity.Item{
+			Name: table,
+		})
+	}
+	dao.db.DB.Table(table).Create(picture)
 }
 
 func (dao LogDao) Write(logEntity *entity.LogEntity) {

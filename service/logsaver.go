@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"github.com/go-redis/redis"
 	"mail_log/dao"
 	"mail_log/entity"
@@ -28,7 +30,17 @@ func (server LogSaverServer) ListenAndSave(level string) {
 			time.Sleep(time.Millisecond)
 			continue
 		}
-		server.dao.Write(&entity.LogEntity{Level: level, Message: message})
+		if level == "picture" {
+			m := entity.PictureEntity{}
+			err = json.Unmarshal([]byte(message), &m)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			server.dao.WritePitcure(&m)
+		} else {
+			server.dao.Write(&entity.LogEntity{Level: level, Message: message})
+		}
 	}
 }
 

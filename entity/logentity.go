@@ -4,8 +4,19 @@ import "gorm.io/gorm"
 
 type LogEntity struct {
 	gorm.Model
+	WorkID  string
+	Name    string
 	Level   string
 	Message string
+}
+
+type PictureEntity struct {
+	gorm.Model
+	OrgName  string
+	Name     string
+	FileName string
+	Data     []byte
+	Pid      string
 }
 
 type Item struct {
